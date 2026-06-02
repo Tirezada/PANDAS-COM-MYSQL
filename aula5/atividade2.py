@@ -1,11 +1,16 @@
 from sqlalchemy import create_engine
-import pandas as pd 
+import pandas as pd
+from dotenv import load_dotenv #NECESSÁRIO PARA TRABALHAR COM .env
+import os
 
 #CONEXÃO COM O BANCO:
-host = 'localhost'
-user = 'root'
-password = ''
-db = 'aula6'
+
+load_dotenv() #PROCURA O ARQUIVO .env 
+
+host = os.getenv('DB_HOST')
+user = os.getenv('DB_USER')
+password = os.getenv('DB_PASSWORD')
+db = os.getenv('DB_DATABASE')
 
 engine = create_engine(
     f'mysql+pymysql://{user}:{password}@{host}/{db}'
@@ -28,7 +33,7 @@ try:
     df_merge2 = pd.merge(df_merge1, df_itens, on="codigo_pedido")
     df_merge3 = pd.merge(df_merge2, df_produtos, on="codigo_produto")
 
-    filtro = (df_merge3['cidade'] == 'Sao Paulo')
+    filtro = (df_merge3['cidade'] == 'Sao Paulo' )
     df_SP = df_merge3[filtro]
     
 except Exception as e:
@@ -47,7 +52,4 @@ print(f'''
 ---------------------------------------------------------------------------------------''')
 
 
-
-#print(df_carlos[['nome', 'sobrenome', 'cidade', 'codigo_pedido', 'data_pedido', 'produto', 'valor' ]])
-#print(gasto_carlos)
 
